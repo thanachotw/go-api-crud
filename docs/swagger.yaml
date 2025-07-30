@@ -1,0 +1,190 @@
+definitions:
+  dto.CreateWalletRequest:
+    properties:
+      currency:
+        type: string
+      owner_id:
+        type: integer
+    type: object
+  dto.UpdateWalletRequest:
+    properties:
+      balance:
+        type: number
+      currency:
+        type: string
+      status:
+        type: string
+    type: object
+  dto.WalletResponse:
+    properties:
+      balance:
+        type: number
+      created_at:
+        type: string
+      currency:
+        type: string
+      id:
+        type: integer
+      owner_id:
+        type: integer
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  http.SwaggerResponse:
+    properties:
+      data: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/wallets:
+    post:
+      consumes:
+      - application/json
+      description: Create a new wallet with the input payload
+      parameters:
+      - description: Create Wallet
+        in: body
+        name: wallet
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateWalletRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.SwaggerResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.WalletResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+      summary: Create a new wallet
+      tags:
+      - wallets
+  /api/v1/wallets/{owner_id}:
+    delete:
+      description: Delete a wallet by owner ID
+      parameters:
+      - description: Owner ID
+        in: path
+        name: owner_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+      summary: Delete a wallet
+      tags:
+      - wallets
+    get:
+      description: Get a wallet by owner ID
+      parameters:
+      - description: Owner ID
+        in: path
+        name: owner_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.SwaggerResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.WalletResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+      summary: Get a wallet
+      tags:
+      - wallets
+    put:
+      consumes:
+      - application/json
+      description: Update a wallet with the input payload
+      parameters:
+      - description: Owner ID
+        in: path
+        name: owner_id
+        required: true
+        type: integer
+      - description: Update Wallet
+        in: body
+        name: wallet
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateWalletRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/http.SwaggerResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.WalletResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.SwaggerResponse'
+      summary: Update a wallet
+      tags:
+      - wallets
+swagger: "2.0"

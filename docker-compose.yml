@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:15
+    container_name: wallet-db
+    environment:
+      POSTGRES_USER: user_wallet_user
+      POSTGRES_PASSWORD: user_wallet_pass
+      POSTGRES_DB: wallets
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user_wallet_user -d wallets"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  wallet-api:
+    container_name: wallet-api
+    build: .
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["./wallet-api", "serve-rest"]

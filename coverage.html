@@ -1,0 +1,1647 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>cmds: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">go-wallet-api/cmd/cmds/rest.go (0.0%)</option>
+				
+				<option value="file1">go-wallet-api/cmd/cmds/root.go (0.0%)</option>
+				
+				<option value="file2">go-wallet-api/cmd/main.go (0.0%)</option>
+				
+				<option value="file3">go-wallet-api/config/init.go (0.0%)</option>
+				
+				<option value="file4">go-wallet-api/docs/docs.go (0.0%)</option>
+				
+				<option value="file5">go-wallet-api/infrastructure/gorm.go (0.0%)</option>
+				
+				<option value="file6">go-wallet-api/infrastructure/seeder.go (0.0%)</option>
+				
+				<option value="file7">go-wallet-api/internal/adapters/http/wallet_handler/wallet_handler.go (81.2%)</option>
+				
+				<option value="file8">go-wallet-api/internal/adapters/repository/wallet/model.go (0.0%)</option>
+				
+				<option value="file9">go-wallet-api/internal/adapters/repository/wallet/wallet.go (0.0%)</option>
+				
+				<option value="file10">go-wallet-api/internal/core/service/wallet/transformer.go (100.0%)</option>
+				
+				<option value="file11">go-wallet-api/internal/core/service/wallet/wallet_service.go (94.3%)</option>
+				
+				<option value="file12">go-wallet-api/internal/dto/wallet.go (50.0%)</option>
+				
+				<option value="file13">go-wallet-api/pkg/appresponse/error.go (100.0%)</option>
+				
+				<option value="file14">go-wallet-api/pkg/appresponse/response.go (100.0%)</option>
+				
+				<option value="file15">go-wallet-api/protocol/http.go (0.0%)</option>
+				
+				<option value="file16">go-wallet-api/tests/mocks/mock_wallet_repository.go (37.7%)</option>
+				
+				<option value="file17">go-wallet-api/tests/mocks/mock_wallet_service.go (42.9%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package cmds
+
+import (
+        "go-wallet-api/protocol"
+
+        "github.com/spf13/cobra"
+)
+
+var restCmd = &amp;cobra.Command{
+        Use:   "serve-rest",
+        Short: "Start the REST API server",
+        Long:  "This command starts the REST API server to handle HTTP requests.",
+        Run: func(cmd *cobra.Command, args []string) <span class="cov0" title="0">{
+                if err := ServeREST(); err != nil </span><span class="cov0" title="0">{
+                        panic(err)</span>
+                }
+        },
+}
+
+func ServeREST() error <span class="cov0" title="0">{
+        return protocol.ServeREST()
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package cmds
+
+import (
+        "log"
+        "os"
+
+        "github.com/spf13/cobra"
+)
+
+var rootCmd = &amp;cobra.Command{
+        Use:   "serve",
+        Short: "A hexagonal CRUD API application",
+        Long:  "This is the root command for the hexagonal CRUD API application.",
+}
+
+func Execute() <span class="cov0" title="0">{
+        if err := rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
+                log.Println(err)
+                os.Exit(1)
+        }</span>
+}
+
+func init() <span class="cov0" title="0">{
+        // Add subcommands here
+        rootCmd.AddCommand(restCmd)
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package main
+
+import "go-wallet-api/cmd/cmds"
+
+func main() <span class="cov0" title="0">{
+        cmds.Execute()
+}</span>
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package config
+
+import (
+        "log"
+
+        "github.com/joho/godotenv"
+        "github.com/kelseyhightower/envconfig"
+)
+
+type Config struct {
+        AppsConfig   AppsConfig     `envconfig:"APP"`
+        UserWalletDB DatabaseConfig `envconfig:"USER_WALLET_DB"`
+}
+
+type AppsConfig struct {
+        Port  string `envconfig:"PORT" default:"8080"`
+        Debug bool   `envconfig:"DEBUG" default:"false"`
+        Env   string `envconfig:"ENV" default:"dev"`
+}
+
+type DatabaseConfig struct {
+        Host     string `envconfig:"HOST"`
+        Port     int    `envconfig:"PORT"`
+        User     string `envconfig:"USER"`
+        Password string `envconfig:"PASSWORD"`
+        Name     string `envconfig:"NAME"`
+}
+
+func InitConfig() Config <span class="cov0" title="0">{
+        _ = godotenv.Load(".env")
+
+        var cfg Config
+        err := envconfig.Process("", &amp;cfg)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("Failed to process environment variables: %v", err)
+        }</span>
+        <span class="cov0" title="0">if cfg.AppsConfig.Env == "local" </span><span class="cov0" title="0">{
+                cfg.UserWalletDB.Host = "localhost"
+        }</span>
+        <span class="cov0" title="0">return cfg</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">// Package docs Code generated by swaggo/swag. DO NOT EDIT
+package docs
+
+import "github.com/swaggo/swag"
+
+const docTemplate = `{
+    "schemes": {{ marshal .Schemes }},
+    "swagger": "2.0",
+    "info": {
+        "description": "{{escape .Description}}",
+        "title": "{{.Title}}",
+        "contact": {},
+        "version": "{{.Version}}"
+    },
+    "host": "{{.Host}}",
+    "basePath": "{{.BasePath}}",
+    "paths": {
+        "/api/v1/wallets": {
+            "post": {
+                "description": "Create a new wallet with the input payload",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "wallets"
+                ],
+                "summary": "Create a new wallet",
+                "parameters": [
+                    {
+                        "description": "Create Wallet",
+                        "name": "wallet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.CreateWalletRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.SwaggerResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.WalletResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/wallets/{owner_id}": {
+            "get": {
+                "description": "Get a wallet by owner ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "wallets"
+                ],
+                "summary": "Get a wallet",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Owner ID",
+                        "name": "owner_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.SwaggerResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.WalletResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a wallet with the input payload",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "wallets"
+                ],
+                "summary": "Update a wallet",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Owner ID",
+                        "name": "owner_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update Wallet",
+                        "name": "wallet",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.UpdateWalletRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/http.SwaggerResponse"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dto.WalletResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a wallet by owner ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "wallets"
+                ],
+                "summary": "Delete a wallet",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Owner ID",
+                        "name": "owner_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.SwaggerResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.CreateWalletRequest": {
+            "type": "object",
+            "properties": {
+                "currency": {
+                    "type": "string"
+                },
+                "owner_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.UpdateWalletRequest": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "number"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.WalletResponse": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "number"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "owner_id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.SwaggerResponse": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}`
+
+// SwaggerInfo holds exported Swagger Info so clients can modify it
+var SwaggerInfo = &amp;swag.Spec{
+        Version:          "",
+        Host:             "",
+        BasePath:         "",
+        Schemes:          []string{},
+        Title:            "",
+        Description:      "",
+        InfoInstanceName: "swagger",
+        SwaggerTemplate:  docTemplate,
+        LeftDelim:        "{{",
+        RightDelim:       "}}",
+}
+
+func init() <span class="cov0" title="0">{
+        swag.Register(SwaggerInfo.InstanceName(), SwaggerInfo)
+}</span>
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package infrastructure
+
+import (
+        "fmt"
+        "go-wallet-api/config"
+        "go-wallet-api/internal/adapters/repository/wallet"
+        "log"
+
+        "gorm.io/driver/postgres"
+        "gorm.io/gorm"
+)
+
+func InitGormDB(config config.DatabaseConfig) *gorm.DB <span class="cov0" title="0">{
+        dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=disable TimeZone=UTC",
+                config.Host,
+                config.User,
+                config.Password,
+                config.Name,
+                config.Port,
+        )
+        log.Println(dsn)
+        db, err := gorm.Open(postgres.Open(dsn), &amp;gorm.Config{})
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("Failed to connect to database: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">log.Println("Database connection established.")
+        return db</span>
+}
+
+func Migrate(db *gorm.DB) <span class="cov0" title="0">{
+        log.Println("Running database migrations...")
+        err := db.AutoMigrate(&amp;wallet.Wallet{})
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("Failed to migrate database: %v", err)
+        }</span>
+        <span class="cov0" title="0">log.Println("Database migration completed.")</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package infrastructure
+
+import (
+        repo "go-wallet-api/internal/adapters/repository/wallet"
+        "log"
+
+        "gorm.io/gorm"
+)
+
+// SeedDatabase populates the database with initial data.
+// It uses FirstOrCreate to ensure that data is not duplicated on subsequent runs.
+func SeedDatabase(db *gorm.DB) <span class="cov0" title="0">{
+        wallets := []repo.Wallet{
+                {OwnerID: 101, Balance: 1500.00, Currency: "USD", Status: "active"},
+                {OwnerID: 102, Balance: 250.75, Currency: "EUR", Status: "active"},
+                {OwnerID: 103, Balance: 9999.99, Currency: "JPY", Status: "inactive"},
+        }
+
+        for _, wallet := range wallets </span><span class="cov0" title="0">{
+                // Check if a wallet with the same OwnerID already exists.
+                // If it does, do nothing. If it doesn't, create it.
+                result := db.FirstOrCreate(&amp;wallet, wallet)
+                if result.Error != nil </span><span class="cov0" title="0">{
+                        log.Printf("Failed to seed wallet for owner %d: %v\n", wallet.OwnerID, result.Error)
+                }</span>
+
+                <span class="cov0" title="0">if result.RowsAffected &gt; 0 </span><span class="cov0" title="0">{
+                        log.Printf("Seeded wallet for owner %d\n", wallet.OwnerID)
+                }</span>
+        }
+
+        <span class="cov0" title="0">log.Println("Database seeding completed.")</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package wallet_handler
+
+import (
+        "net/http"
+        "strconv"
+
+        "go-wallet-api/internal/core/domain"
+        "go-wallet-api/internal/core/port"
+        "go-wallet-api/internal/dto"
+        appresponse "go-wallet-api/pkg/appresponse"
+
+        "github.com/gin-gonic/gin"
+)
+
+// SwaggerResponse represents a generic response for Swagger documentation.
+type SwaggerResponse struct {
+        Success bool        `json:"success"`
+        Message string      `json:"message"`
+        Data    interface{} `json:"data,omitempty"`
+}
+
+type WalletHandler struct {
+        Service port.WalletService
+}
+
+func NewWalletHandler(s port.WalletService) *WalletHandler <span class="cov8" title="1">{
+        return &amp;WalletHandler{Service: s}
+}</span>
+
+// CreateWallet godoc
+// @Summary Create a new wallet
+// @Description Create a new wallet with the input payload
+// @Tags wallets
+// @Accept  json
+// @Produce  json
+// @Param wallet body dto.CreateWalletRequest true "Create Wallet"
+// @Success 200 {object} SwaggerResponse{data=dto.WalletResponse}
+// @Failure 400 {object} SwaggerResponse
+// @Failure 500 {object} SwaggerResponse
+// @Router /api/v1/wallets [post]
+func (h *WalletHandler) CreateWallet(c *gin.Context) <span class="cov8" title="1">{
+        var req dto.CreateWalletRequest
+
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov8" title="1">{
+                appresponse.ReponseError(c, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+        <span class="cov8" title="1">wallet, err := h.Service.CreateWallet(&amp;domain.CreateWalletInput{
+                OwnerID:  req.OwnerID,
+                Currency: req.Currency,
+        })
+        if err != nil </span><span class="cov8" title="1">{
+                appresponse.HandlerErrorResponse(c, err)
+                return
+        }</span>
+        <span class="cov8" title="1">appresponse.ResponseSuccess(c, appresponse.SuccessMessage, dto.ToWalletResponse(wallet))</span>
+}
+
+// GetWallet godoc
+// @Summary Get a wallet
+// @Description Get a wallet by owner ID
+// @Tags wallets
+// @Produce  json
+// @Param owner_id path int true "Owner ID"
+// @Success 200 {object} SwaggerResponse{data=dto.WalletResponse}
+// @Failure 400 {object} SwaggerResponse
+// @Failure 404 {object} SwaggerResponse
+// @Failure 500 {object} SwaggerResponse
+// @Router /api/v1/wallets/{owner_id} [get]
+func (h *WalletHandler) GetWallet(c *gin.Context) <span class="cov8" title="1">{
+        id, _ := strconv.Atoi(c.Param("owner_id"))
+        wallet, err := h.Service.GetWallet(uint(id))
+        if err != nil </span><span class="cov8" title="1">{
+                appresponse.HandlerErrorResponse(c, err)
+                return
+        }</span>
+        <span class="cov8" title="1">appresponse.ResponseSuccess(c, appresponse.SuccessMessage, dto.ToWalletResponse(wallet))</span>
+}
+
+// UpdateWallet godoc
+// @Summary Update a wallet
+// @Description Update a wallet with the input payload
+// @Tags wallets
+// @Accept  json
+// @Produce  json
+// @Param owner_id path int true "Owner ID"
+// @Param wallet body dto.UpdateWalletRequest true "Update Wallet"
+// @Success 200 {object} SwaggerResponse{data=dto.WalletResponse}
+// @Failure 400 {object} SwaggerResponse
+// @Failure 404 {object} SwaggerResponse
+// @Failure 500 {object} SwaggerResponse
+// @Router /api/v1/wallets/{owner_id} [put]
+func (h *WalletHandler) UpdateWallet(c *gin.Context) <span class="cov8" title="1">{
+        id, _ := strconv.Atoi(c.Param("owner_id"))
+        var req dto.UpdateWalletRequest
+        if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
+                appresponse.ReponseError(c, http.StatusBadRequest, err.Error())
+                return
+        }</span>
+        <span class="cov8" title="1">wallet, err := h.Service.UpdateWallet(&amp;domain.UpdateWalletInput{
+                OwnerID:  uint(id),
+                Balance:  req.Balance,
+                Currency: req.Currency,
+                Status:   req.Status,
+        })
+
+        if err != nil </span><span class="cov0" title="0">{
+                appresponse.HandlerErrorResponse(c, err)
+                return
+        }</span>
+        <span class="cov8" title="1">appresponse.ResponseSuccess(c, appresponse.SuccessMessage, dto.ToWalletResponse(wallet))</span>
+}
+
+// DeleteWallet godoc
+// @Summary Delete a wallet
+// @Description Delete a wallet by owner ID
+// @Tags wallets
+// @Produce  json
+// @Param owner_id path int true "Owner ID"
+// @Success 200 {object} SwaggerResponse
+// @Failure 400 {object} SwaggerResponse
+// @Failure 404 {object} SwaggerResponse
+// @Failure 500 {object} SwaggerResponse
+// @Router /api/v1/wallets/{owner_id} [delete]
+func (h *WalletHandler) DeleteWallet(c *gin.Context) <span class="cov8" title="1">{
+        id, _ := strconv.Atoi(c.Param("owner_id"))
+        err := h.Service.DeleteWallet(uint(id))
+        if err != nil </span><span class="cov0" title="0">{
+                appresponse.HandlerErrorResponse(c, err)
+                return
+        }</span>
+        <span class="cov8" title="1">appresponse.ResponseSuccess(c, appresponse.SuccessMessage, nil)</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package wallet
+
+import (
+        "go-wallet-api/internal/core/domain"
+        "time"
+)
+
+var (
+        WalletTableName = "wallets"
+)
+
+// Wallet is the GORM model for the wallets table.
+// It is kept separate from the core domain model.
+type Wallet struct {
+        ID        uint `gorm:"primaryKey"`
+        OwnerID   uint
+        Balance   float64
+        Currency  string
+        Status    string
+        CreatedAt time.Time
+        UpdatedAt time.Time
+}
+
+// toDomain converts the repository's Wallet model to the core domain.Wallet model.
+func (w *Wallet) toDomain() *domain.Wallet <span class="cov0" title="0">{
+        return &amp;domain.Wallet{
+                ID:        w.ID,
+                OwnerID:   w.OwnerID,
+                Balance:   w.Balance,
+                Currency:  w.Currency,
+                Status:    w.Status,
+                CreatedAt: w.CreatedAt,
+                UpdatedAt: w.UpdatedAt,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package wallet
+
+import (
+        "go-wallet-api/internal/core/domain"
+
+        "gorm.io/gorm"
+)
+
+type WalletRepo struct {
+        DB *gorm.DB
+}
+
+func NewWalletRepo(db *gorm.DB) *WalletRepo <span class="cov0" title="0">{
+        return &amp;WalletRepo{DB: db}
+}</span>
+
+func (r *WalletRepo) Create(walletModel *Wallet) error <span class="cov0" title="0">{
+        return r.DB.Table(WalletTableName).Create(walletModel).Error
+}</span>
+
+func (r *WalletRepo) GetByID(ownerId uint) (*domain.Wallet, error) <span class="cov0" title="0">{
+        var walletModel Wallet
+        result := r.DB.Table(WalletTableName).First(&amp;walletModel, "owner_id = ?", ownerId)
+        if result.Error != nil </span><span class="cov0" title="0">{
+                return nil, result.Error
+        }</span>
+        <span class="cov0" title="0">return walletModel.toDomain(), nil</span>
+}
+
+func (r *WalletRepo) Update(walletModel *Wallet) error <span class="cov0" title="0">{
+        return r.DB.Table(WalletTableName).Model(&amp;Wallet{}).Where("owner_id = ?", walletModel.OwnerID).Updates(walletModel).Error
+}</span>
+
+func (r *WalletRepo) Delete(ownerId uint) error <span class="cov0" title="0">{
+        return r.DB.Table(WalletTableName).Where("owner_id = ?", ownerId).Delete(&amp;Wallet{}).Error
+}</span>
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package wallet
+
+import (
+        repo "go-wallet-api/internal/adapters/repository/wallet"
+        domain "go-wallet-api/internal/core/domain"
+)
+
+// fromDomain converts a core domain.Wallet model to the repository's Wallet model.
+func toWalletModel(d *domain.Wallet) *repo.Wallet <span class="cov8" title="1">{
+        return &amp;repo.Wallet{
+                ID:        d.ID,
+                OwnerID:   d.OwnerID,
+                Balance:   d.Balance,
+                Currency:  d.Currency,
+                Status:    d.Status,
+                CreatedAt: d.CreatedAt,
+                UpdatedAt: d.UpdatedAt,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package wallet
+
+import (
+        "errors"
+        "go-wallet-api/internal/core/domain"
+        "go-wallet-api/internal/core/port"
+        appresponse "go-wallet-api/pkg/appresponse"
+        "strings"
+        "time"
+
+        "gorm.io/gorm"
+)
+
+type WalletService struct {
+        Repo port.WalletRepository
+}
+
+func NewWalletService(repo port.WalletRepository) port.WalletService <span class="cov8" title="1">{
+        return &amp;WalletService{Repo: repo}
+}</span>
+
+func (s *WalletService) CreateWallet(input *domain.CreateWalletInput) (*domain.Wallet, error) <span class="cov8" title="1">{
+        if input.OwnerID == 0 </span><span class="cov8" title="1">{
+                return nil, appresponse.ErrOwnerIDInvalid
+        }</span>
+        <span class="cov8" title="1">if input.Currency != "THB" &amp;&amp; input.Currency != "USD" </span><span class="cov8" title="1">{
+                return nil, appresponse.ErrUnsupportedCurrency
+        }</span>
+        <span class="cov8" title="1">w := &amp;domain.Wallet{
+                OwnerID:   input.OwnerID,
+                Balance:   0,
+                Currency:  input.Currency,
+                Status:    "active",
+                CreatedAt: time.Now(),
+                UpdatedAt: time.Now(),
+        }
+        err := s.Repo.Create(toWalletModel(w))
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">return w, nil</span>
+}
+
+func (s *WalletService) GetWallet(id uint) (*domain.Wallet, error) <span class="cov8" title="1">{
+        wallet, err := s.Repo.GetByID(id)
+        if err != nil </span><span class="cov8" title="1">{
+                if errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        return nil, appresponse.ErrNotFound
+                }</span>
+                <span class="cov8" title="1">return nil, appresponse.ErrInternalServer</span>
+        }
+        <span class="cov8" title="1">if wallet == nil </span><span class="cov0" title="0">{
+                return nil, appresponse.ErrNotFound
+        }</span>
+        <span class="cov8" title="1">return wallet, nil</span>
+}
+
+func (s *WalletService) UpdateWallet(input *domain.UpdateWalletInput) (*domain.Wallet, error) <span class="cov8" title="1">{
+        w, err := s.Repo.GetByID(input.OwnerID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">if input.Currency != "" </span><span class="cov8" title="1">{
+                if input.Currency != "THB" &amp;&amp; input.Currency != "USD" </span><span class="cov8" title="1">{
+                        return nil, errors.New("unsupported currency")
+                }</span>
+                <span class="cov8" title="1">w.Currency = input.Currency</span>
+        }
+        <span class="cov8" title="1">if input.Status != "" </span><span class="cov8" title="1">{
+                status := strings.ToLower(input.Status)
+                if status != "active" &amp;&amp; status != "disabled" </span><span class="cov8" title="1">{
+                        return nil, errors.New("unsupported status")
+                }</span>
+                <span class="cov8" title="1">w.Status = status</span>
+        }
+        <span class="cov8" title="1">w.UpdatedAt = time.Now()
+        w.Balance = input.Balance
+        err = s.Repo.Update(toWalletModel(w))
+        return w, err</span>
+}
+
+func (s *WalletService) DeleteWallet(id uint) error <span class="cov8" title="1">{
+        return s.Repo.Delete(id)
+}</span>
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package dto
+
+import (
+        "go-wallet-api/internal/core/domain"
+        "time"
+)
+
+type CreateWalletRequest struct {
+        OwnerID  uint   `json:"owner_id"`
+        Currency string `json:"currency"`
+}
+
+type UpdateWalletRequest struct {
+        Currency string  `json:"currency"`
+        Balance  float64 `json:"balance"`
+        Status   string  `json:"status"`
+}
+
+// WalletResponse represents a wallet for a user.
+type WalletResponse struct {
+        ID        uint      `json:"id"`
+        OwnerID   uint      `json:"owner_id"`
+        Balance   float64   `json:"balance"`
+        Currency  string    `json:"currency"`
+        Status    string    `json:"status"`
+        CreatedAt time.Time `json:"created_at"`
+        UpdatedAt time.Time `json:"updated_at"`
+}
+
+func (r *WalletResponse) ToDomain() *domain.Wallet <span class="cov0" title="0">{
+        return &amp;domain.Wallet{
+                ID:        r.ID,
+                OwnerID:   r.OwnerID,
+                Balance:   r.Balance,
+                Currency:  r.Currency,
+                Status:    r.Status,
+                CreatedAt: r.CreatedAt,
+                UpdatedAt: r.UpdatedAt,
+        }
+}</span>
+
+func ToWalletResponse(wallet *domain.Wallet) *WalletResponse <span class="cov8" title="1">{
+        return &amp;WalletResponse{
+                ID:        wallet.ID,
+                OwnerID:   wallet.OwnerID,
+                Balance:   wallet.Balance,
+                Currency:  wallet.Currency,
+                Status:    wallet.Status,
+                CreatedAt: wallet.CreatedAt,
+                UpdatedAt: wallet.UpdatedAt,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package response
+
+import (
+        "errors"
+        "net/http"
+
+        "github.com/gin-gonic/gin"
+)
+
+var (
+        ErrNotFound            = errors.New("resource not found")
+        ErrInvalidInput        = errors.New("invalid input provided")
+        ErrInternalServer      = errors.New("internal server error")
+        ErrUnauthorized        = errors.New("unauthorized access")
+        ErrOwnerIDInvalid      = errors.New("owner_id must be positive")
+        ErrUnsupportedCurrency = errors.New("unsupported currency")
+)
+
+var (
+        SuccessMessage = "successfully"
+)
+var (
+        // Errs is a map of error messages to their corresponding error codes
+        Errs = map[error]int{
+                ErrNotFound:            http.StatusNotFound,
+                ErrInvalidInput:        http.StatusBadRequest,
+                ErrUnsupportedCurrency: http.StatusBadRequest,
+                ErrOwnerIDInvalid:      http.StatusBadRequest,
+                ErrInternalServer:      http.StatusInternalServerError,
+                ErrUnauthorized:        http.StatusUnauthorized,
+        }
+)
+
+func HandlerErrorResponse(c *gin.Context, err error) <span class="cov8" title="1">{
+        errCode, ok := Errs[err]
+        if !ok </span><span class="cov8" title="1">{
+                errCode = http.StatusInternalServerError
+        }</span>
+        <span class="cov8" title="1">ReponseError(c, errCode, err.Error())</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package response
+
+import (
+        "github.com/gin-gonic/gin"
+)
+
+// Response is a generic response structure.
+type Response struct {
+        Success bool        `json:"success"`
+        Message string      `json:"message"`
+        Data    interface{} `json:"data,omitempty"`
+        Error   interface{} `json:"error,omitempty"`
+}
+
+func ResponseSuccess(c *gin.Context, message string, data interface{}) <span class="cov8" title="1">{
+        c.JSON(200, Response{
+                Success: true,
+                Message: message,
+                Data:    data,
+        })
+}</span>
+
+func ReponseError(c *gin.Context, errCode int, message string) <span class="cov8" title="1">{
+        c.JSON(errCode, Response{
+                Success: false,
+                Message: message,
+        })
+}</span>
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package protocol
+
+import (
+        "go-wallet-api/config"
+        _ "go-wallet-api/docs"
+        "go-wallet-api/infrastructure"
+        walletH "go-wallet-api/internal/adapters/http/wallet_handler"
+        "go-wallet-api/internal/adapters/repository/wallet"
+        service "go-wallet-api/internal/core/service/wallet"
+
+        "github.com/gin-gonic/gin"
+        swaggerFiles "github.com/swaggo/files"
+        ginSwagger "github.com/swaggo/gin-swagger"
+)
+
+// @title Wallet API
+// @version 1.0
+// @description This is a sample server for a wallet API.
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name API Support
+// @contact.url http://www.swagger.io/support
+// @contact.email support@swagger.io
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:8080
+// @BasePath /api/v1
+// @schemes https
+// @schemes https
+func ServeREST() error <span class="cov0" title="0">{
+        cfg := config.InitConfig()
+        db := infrastructure.InitGormDB(cfg.UserWalletDB)
+        infrastructure.Migrate(db)
+
+        // Seed the database with initial data
+        infrastructure.SeedDatabase(db)
+
+        walletRepo := wallet.NewWalletRepo(db)
+        walletSvc := service.NewWalletService(walletRepo)
+        walletHandler := walletH.NewWalletHandler(walletSvc)
+
+        r := gin.Default()
+        api := r.Group("/api")
+        apiV1 := api.Group("/v1")
+        // Register wallet routes
+        apiV1.POST("/wallets", walletHandler.CreateWallet)
+        apiV1.GET("/wallets/:owner_id", walletHandler.GetWallet)
+        apiV1.PUT("/wallets/:owner_id", walletHandler.UpdateWallet)
+        apiV1.DELETE("/wallets/:owner_id", walletHandler.DeleteWallet)
+
+        // Swagger endpoint
+        r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+        // Health check endpoint
+        r.GET("/healthcheck", func(c *gin.Context) </span><span class="cov0" title="0">{
+                c.JSON(200, gin.H{"status": "ok"})
+        }</span>)
+
+        <span class="cov0" title="0">return r.Run(":" + cfg.AppsConfig.Port)</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">// Code generated by mockery v2.43.2. DO NOT EDIT.
+
+package mocks
+
+import (
+        domain "go-wallet-api/internal/core/domain"
+        wallet "go-wallet-api/internal/adapters/repository/wallet"
+        mock "github.com/stretchr/testify/mock"
+)
+
+// MockWalletRepository is an autogenerated mock type for the WalletRepository type
+type MockWalletRepository struct {
+        mock.Mock
+}
+
+type MockWalletRepository_Expecter struct {
+        mock *mock.Mock
+}
+
+func (_m *MockWalletRepository) EXPECT() *MockWalletRepository_Expecter <span class="cov0" title="0">{
+        return &amp;MockWalletRepository_Expecter{mock: &amp;_m.Mock}
+}</span>
+
+// Create provides a mock function with given fields: walletModel
+func (_m *MockWalletRepository) Create(walletModel *wallet.Wallet) error <span class="cov8" title="1">{
+        ret := _m.Called(walletModel)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Create")</span>
+        }
+
+        <span class="cov8" title="1">var r0 error
+        if rf, ok := ret.Get(0).(func(*wallet.Wallet) error); ok </span><span class="cov0" title="0">{
+                r0 = rf(walletModel)
+        }</span> else<span class="cov8" title="1"> {
+                r0 = ret.Error(0)
+        }</span>
+
+        <span class="cov8" title="1">return r0</span>
+}
+
+// MockWalletRepository_Create_Call provides a mock function with given fields: walletModel
+type MockWalletRepository_Create_Call struct {
+        *mock.Call
+}
+
+// Create is a helper method to define mock.On call
+//   - walletModel *wallet.Wallet
+func (_e *MockWalletRepository_Expecter) Create(walletModel interface{}) *MockWalletRepository_Create_Call <span class="cov0" title="0">{
+        return &amp;MockWalletRepository_Create_Call{Call: _e.mock.On("Create", walletModel)}
+}</span>
+
+func (_c *MockWalletRepository_Create_Call) Run(run func(walletModel *wallet.Wallet)) *MockWalletRepository_Create_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*wallet.Wallet))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockWalletRepository_Create_Call) Return(_a0 error) *MockWalletRepository_Create_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0)
+        return _c
+}</span>
+
+func (_c *MockWalletRepository_Create_Call) RunAndReturn(run func(*wallet.Wallet) error) *MockWalletRepository_Create_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// Delete provides a mock function with given fields: id
+func (_m *MockWalletRepository) Delete(id uint) error <span class="cov8" title="1">{
+        ret := _m.Called(id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Delete")</span>
+        }
+
+        <span class="cov8" title="1">var r0 error
+        if rf, ok := ret.Get(0).(func(uint) error); ok </span><span class="cov0" title="0">{
+                r0 = rf(id)
+        }</span> else<span class="cov8" title="1"> {
+                r0 = ret.Error(0)
+        }</span>
+
+        <span class="cov8" title="1">return r0</span>
+}
+
+// MockWalletRepository_Delete_Call provides a mock function with given fields: id
+type MockWalletRepository_Delete_Call struct {
+        *mock.Call
+}
+
+// Delete is a helper method to define mock.On call
+//   - id uint
+func (_e *MockWalletRepository_Expecter) Delete(id interface{}) *MockWalletRepository_Delete_Call <span class="cov0" title="0">{
+        return &amp;MockWalletRepository_Delete_Call{Call: _e.mock.On("Delete", id)}
+}</span>
+
+func (_c *MockWalletRepository_Delete_Call) Run(run func(id uint)) *MockWalletRepository_Delete_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(uint))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockWalletRepository_Delete_Call) Return(_a0 error) *MockWalletRepository_Delete_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0)
+        return _c
+}</span>
+
+func (_c *MockWalletRepository_Delete_Call) RunAndReturn(run func(uint) error) *MockWalletRepository_Delete_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// GetByID provides a mock function with given fields: ownerId
+func (_m *MockWalletRepository) GetByID(ownerId uint) (*domain.Wallet, error) <span class="cov8" title="1">{
+        ret := _m.Called(ownerId)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetByID")</span>
+        }
+
+        <span class="cov8" title="1">var r0 *domain.Wallet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(uint) (*domain.Wallet, error)); ok </span><span class="cov0" title="0">{
+                return rf(ownerId)
+        }</span>
+        <span class="cov8" title="1">if rf, ok := ret.Get(0).(func(uint) *domain.Wallet); ok </span><span class="cov0" title="0">{
+                r0 = rf(ownerId)
+        }</span> else<span class="cov8" title="1"> {
+                if ret.Get(0) != nil </span><span class="cov8" title="1">{
+                        r0 = ret.Get(0).(*domain.Wallet)
+                }</span>
+                }
+
+        <span class="cov8" title="1">if rf, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ownerId)
+        }</span> else<span class="cov8" title="1"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov8" title="1">return r0, r1</span>
+}
+
+// MockWalletRepository_GetByID_Call provides a mock function with given fields: ownerId
+type MockWalletRepository_GetByID_Call struct {
+        *mock.Call
+}
+
+// GetByID is a helper method to define mock.On call
+//   - ownerId uint
+func (_e *MockWalletRepository_Expecter) GetByID(ownerId interface{}) *MockWalletRepository_GetByID_Call <span class="cov0" title="0">{
+        return &amp;MockWalletRepository_GetByID_Call{Call: _e.mock.On("GetByID", ownerId)}
+}</span>
+
+func (_c *MockWalletRepository_GetByID_Call) Run(run func(ownerId uint)) *MockWalletRepository_GetByID_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(uint))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockWalletRepository_GetByID_Call) Return(_a0 *domain.Wallet, _a1 error) *MockWalletRepository_GetByID_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockWalletRepository_GetByID_Call) RunAndReturn(run func(uint) (*domain.Wallet, error)) *MockWalletRepository_GetByID_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// Update provides a mock function with given fields: walletModel
+func (_m *MockWalletRepository) Update(walletModel *wallet.Wallet) error <span class="cov8" title="1">{
+        ret := _m.Called(walletModel)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Update")</span>
+        }
+
+        <span class="cov8" title="1">var r0 error
+        if rf, ok := ret.Get(0).(func(*wallet.Wallet) error); ok </span><span class="cov0" title="0">{
+                r0 = rf(walletModel)
+        }</span> else<span class="cov8" title="1"> {
+                r0 = ret.Error(0)
+        }</span>
+
+        <span class="cov8" title="1">return r0</span>
+}
+
+// MockWalletRepository_Update_Call provides a mock function with given fields: walletModel
+type MockWalletRepository_Update_Call struct {
+        *mock.Call
+}
+
+// Update is a helper method to define mock.On call
+//   - walletModel *wallet.Wallet
+func (_e *MockWalletRepository_Expecter) Update(walletModel interface{}) *MockWalletRepository_Update_Call <span class="cov0" title="0">{
+        return &amp;MockWalletRepository_Update_Call{Call: _e.mock.On("Update", walletModel)}
+}</span>
+
+func (_c *MockWalletRepository_Update_Call) Run(run func(walletModel *wallet.Wallet)) *MockWalletRepository_Update_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*wallet.Wallet))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockWalletRepository_Update_Call) Return(_a0 error) *MockWalletRepository_Update_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0)
+        return _c
+}</span>
+
+func (_c *MockWalletRepository_Update_Call) RunAndReturn(run func(*wallet.Wallet) error) *MockWalletRepository_Update_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// NewMockWalletRepository creates a new instance of MockWalletRepository. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockWalletRepository(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *MockWalletRepository <span class="cov0" title="0">{
+        mock := &amp;MockWalletRepository{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">// Code generated by mockery v2.43.2. DO NOT EDIT.
+
+package mocks
+
+import (
+        domain "go-wallet-api/internal/core/domain"
+        mock "github.com/stretchr/testify/mock"
+)
+
+// MockWalletService is an autogenerated mock type for the WalletService type
+type MockWalletService struct {
+        mock.Mock
+}
+
+type MockWalletService_Expecter struct {
+        mock *mock.Mock
+}
+
+func (_m *MockWalletService) EXPECT() *MockWalletService_Expecter <span class="cov0" title="0">{
+        return &amp;MockWalletService_Expecter{mock: &amp;_m.Mock}
+}</span>
+
+// CreateWallet provides a mock function with given fields: input
+func (_m *MockWalletService) CreateWallet(input *domain.CreateWalletInput) (*domain.Wallet, error) <span class="cov8" title="1">{
+        ret := _m.Called(input)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for CreateWallet")</span>
+        }
+
+        <span class="cov8" title="1">var r0 *domain.Wallet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*domain.CreateWalletInput) (*domain.Wallet, error)); ok </span><span class="cov0" title="0">{
+                return rf(input)
+        }</span>
+        <span class="cov8" title="1">if rf, ok := ret.Get(0).(func(*domain.CreateWalletInput) *domain.Wallet); ok </span><span class="cov0" title="0">{
+                r0 = rf(input)
+        }</span> else<span class="cov8" title="1"> {
+                if ret.Get(0) != nil </span><span class="cov8" title="1">{
+                        r0 = ret.Get(0).(*domain.Wallet)
+                }</span>
+        }
+
+        <span class="cov8" title="1">if rf, ok := ret.Get(1).(func(*domain.CreateWalletInput) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(input)
+        }</span> else<span class="cov8" title="1"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov8" title="1">return r0, r1</span>
+}
+
+// MockWalletService_CreateWallet_Call provides a mock function with given fields: a0
+type MockWalletService_CreateWallet_Call struct {
+        *mock.Call
+}
+
+// CreateWallet is a helper method to define mock.On call
+//   - input *domain.CreateWalletInput
+func (_e *MockWalletService_Expecter) CreateWallet(input interface{}) *MockWalletService_CreateWallet_Call <span class="cov0" title="0">{
+        return &amp;MockWalletService_CreateWallet_Call{Call: _e.mock.On("CreateWallet", input)}
+}</span>
+
+func (_c *MockWalletService_CreateWallet_Call) Run(run func(input *domain.CreateWalletInput)) *MockWalletService_CreateWallet_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*domain.CreateWalletInput))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockWalletService_CreateWallet_Call) Return(_a0 *domain.Wallet, _a1 error) *MockWalletService_CreateWallet_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockWalletService_CreateWallet_Call) RunAndReturn(run func(*domain.CreateWalletInput) (*domain.Wallet, error)) *MockWalletService_CreateWallet_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// DeleteWallet provides a mock function with given fields: id
+func (_m *MockWalletService) DeleteWallet(id uint) error <span class="cov8" title="1">{
+        ret := _m.Called(id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for DeleteWallet")</span>
+        }
+
+        <span class="cov8" title="1">var r0 error
+        if rf, ok := ret.Get(0).(func(uint) error); ok </span><span class="cov0" title="0">{
+                r0 = rf(id)
+        }</span> else<span class="cov8" title="1"> {
+                r0 = ret.Error(0)
+        }</span>
+
+        <span class="cov8" title="1">return r0</span>
+}
+
+// MockWalletService_DeleteWallet_Call provides a mock function with given fields: id
+type MockWalletService_DeleteWallet_Call struct {
+        *mock.Call
+}
+
+// DeleteWallet is a helper method to define mock.On call
+//   - id uint
+func (_e *MockWalletService_Expecter) DeleteWallet(id interface{}) *MockWalletService_DeleteWallet_Call <span class="cov0" title="0">{
+        return &amp;MockWalletService_DeleteWallet_Call{Call: _e.mock.On("DeleteWallet", id)}
+}</span>
+
+func (_c *MockWalletService_DeleteWallet_Call) Run(run func(id uint)) *MockWalletService_DeleteWallet_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(uint))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockWalletService_DeleteWallet_Call) Return(_a0 error) *MockWalletService_DeleteWallet_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0)
+        return _c
+}</span>
+
+func (_c *MockWalletService_DeleteWallet_Call) RunAndReturn(run func(uint) error) *MockWalletService_DeleteWallet_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// GetWallet provides a mock function with given fields: id
+func (_m *MockWalletService) GetWallet(id uint) (*domain.Wallet, error) <span class="cov8" title="1">{
+        ret := _m.Called(id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetWallet")</span>
+        }
+
+        <span class="cov8" title="1">var r0 *domain.Wallet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(uint) (*domain.Wallet, error)); ok </span><span class="cov0" title="0">{
+                return rf(id)
+        }</span>
+        <span class="cov8" title="1">if rf, ok := ret.Get(0).(func(uint) *domain.Wallet); ok </span><span class="cov0" title="0">{
+                r0 = rf(id)
+        }</span> else<span class="cov8" title="1"> {
+                if ret.Get(0) != nil </span><span class="cov8" title="1">{
+                        r0 = ret.Get(0).(*domain.Wallet)
+                }</span>
+        }
+
+        <span class="cov8" title="1">if rf, ok := ret.Get(1).(func(uint) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(id)
+        }</span> else<span class="cov8" title="1"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov8" title="1">return r0, r1</span>
+}
+
+// MockWalletService_GetWallet_Call provides a mock function with given fields: id
+type MockWalletService_GetWallet_Call struct {
+        *mock.Call
+}
+
+// GetWallet is a helper method to define mock.On call
+//   - id uint
+func (_e *MockWalletService_Expecter) GetWallet(id interface{}) *MockWalletService_GetWallet_Call <span class="cov0" title="0">{
+        return &amp;MockWalletService_GetWallet_Call{Call: _e.mock.On("GetWallet", id)}
+}</span>
+
+func (_c *MockWalletService_GetWallet_Call) Run(run func(id uint)) *MockWalletService_GetWallet_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(uint))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockWalletService_GetWallet_Call) Return(_a0 *domain.Wallet, _a1 error) *MockWalletService_GetWallet_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockWalletService_GetWallet_Call) RunAndReturn(run func(uint) (*domain.Wallet, error)) *MockWalletService_GetWallet_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// UpdateWallet provides a mock function with given fields: input
+func (_m *MockWalletService) UpdateWallet(input *domain.UpdateWalletInput) (*domain.Wallet, error) <span class="cov8" title="1">{
+        ret := _m.Called(input)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for UpdateWallet")</span>
+        }
+
+        <span class="cov8" title="1">var r0 *domain.Wallet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(*domain.UpdateWalletInput) (*domain.Wallet, error)); ok </span><span class="cov0" title="0">{
+                return rf(input)
+        }</span>
+        <span class="cov8" title="1">if rf, ok := ret.Get(0).(func(*domain.UpdateWalletInput) *domain.Wallet); ok </span><span class="cov0" title="0">{
+                r0 = rf(input)
+        }</span> else<span class="cov8" title="1"> {
+                if ret.Get(0) != nil </span><span class="cov8" title="1">{
+                        r0 = ret.Get(0).(*domain.Wallet)
+                }</span>
+        }
+
+        <span class="cov8" title="1">if rf, ok := ret.Get(1).(func(*domain.UpdateWalletInput) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(input)
+        }</span> else<span class="cov8" title="1"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov8" title="1">return r0, r1</span>
+}
+
+// MockWalletService_UpdateWallet_Call provides a mock function with given fields: input
+type MockWalletService_UpdateWallet_Call struct {
+        *mock.Call
+}
+
+// UpdateWallet is a helper method to define mock.On call
+//   - input *domain.UpdateWalletInput
+func (_e *MockWalletService_Expecter) UpdateWallet(input interface{}) *MockWalletService_UpdateWallet_Call <span class="cov0" title="0">{
+        return &amp;MockWalletService_UpdateWallet_Call{Call: _e.mock.On("UpdateWallet", input)}
+}</span>
+
+func (_c *MockWalletService_UpdateWallet_Call) Run(run func(input *domain.UpdateWalletInput)) *MockWalletService_UpdateWallet_Call <span class="cov0" title="0">{
+        _c.Call.Run(func(args mock.Arguments) </span><span class="cov0" title="0">{
+                run(args[0].(*domain.UpdateWalletInput))
+        }</span>)
+        <span class="cov0" title="0">return _c</span>
+}
+
+func (_c *MockWalletService_UpdateWallet_Call) Return(_a0 *domain.Wallet, _a1 error) *MockWalletService_UpdateWallet_Call <span class="cov0" title="0">{
+        _c.Call.Return(_a0, _a1)
+        return _c
+}</span>
+
+func (_c *MockWalletService_UpdateWallet_Call) RunAndReturn(run func(*domain.UpdateWalletInput) (*domain.Wallet, error)) *MockWalletService_UpdateWallet_Call <span class="cov0" title="0">{
+        _c.Call.Return(run)
+        return _c
+}</span>
+
+// NewMockWalletService creates a new instance of MockWalletService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewMockWalletService(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *MockWalletService <span class="cov0" title="0">{
+        mock := &amp;MockWalletService{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
