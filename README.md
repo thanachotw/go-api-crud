@@ -159,7 +159,6 @@ This project follows a Hexagonal Architecture (also known as Ports and Adapters 
 │   │   │   ├── repository.go # Interface for data persistence (Driven Port)
 │   │   │   └── service.go   # Interface for business logic (Driving Port)
 │   │   └── service/         # Application Services (Use Cases)
-│   └── dto/                 # Data Transfer Objects
 ├── pkg/                     # Reusable Packages
 ├── protocol/                # Protocol-Specific Implementations (e.g., HTTP server setup)
 └── utils/                   # General Utilities
