@@ -135,7 +135,7 @@ API for managing digital wallets (Wallets) that allows users to create, view, ed
 
 - **Backend Framework:** Gin (HTTP Router)  
 - **ORM:** GORM (Go ORM)  
-- **Architecture:** Hexagonal Architecture (Clean Architecture)
+- **Architecture:** Hexagonal Architecture
 
 
 ## Project Structure (Conceptual)
