@@ -127,7 +127,7 @@ API for managing digital wallets (Wallets) that allows users to create, view, ed
   - Deletes or deactivates the wallet by `owner_id`.
   - Actual deletion might be a soft-delete or a status change to `Inactive`.
   - Returns HTTP 404 if the wallet is not found.
-  - Returns HTTP 204 No Content on successful deletion.
+  - Returns HTTP 200 on successful deletion.
 
 ---
 
